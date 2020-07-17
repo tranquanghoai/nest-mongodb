@@ -1,7 +1,9 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './auth.schema';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -15,6 +17,12 @@ export class AuthController {
     @Post('signin')
     async signIn(@Body(ValidationPipe) authCredentials: AuthCredentialsDto): Promise<{ accessToken: string }> {
         return this.authService.signIn(authCredentials)
+    }
+
+    @Post('test')
+    @UseGuards(AuthGuard())
+    test(@GetUser() user) {
+        console.log(user)
     }
 
 }
