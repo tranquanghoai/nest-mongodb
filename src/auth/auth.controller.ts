@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './schema/auth.schema';
 import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
 @UseFilters(new HttpExceptionFilter())
@@ -17,6 +19,12 @@ export class AuthController {
     @Post('signin')
     async signIn(@Body(ValidationPipe) authCredentials: AuthCredentialsDto): Promise<{ accessToken: string }> {
         return this.authService.signIn(authCredentials)
+    }
+
+    @Post('test')
+    @UseGuards(AuthGuard())
+    test(@GetUser() user) {
+        console.log(user)
     }
 
 }
