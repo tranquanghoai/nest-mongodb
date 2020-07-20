@@ -1,7 +1,7 @@
 import { Injectable, ConflictException, InternalServerErrorException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 const bcryptjs = require('bcryptjs');
-import { User } from './auth.schema';
+import { User } from './schema/auth.schema';
 import { Model } from 'mongoose';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -42,15 +42,4 @@ export class AuthService {
         return { accessToken }
     }
 
-    // private async validateUserPassword(authCredentials: AuthCredentialsDto): Promise<User> {
-    //     const { email, password } = authCredentials
-    //     const user = await this.userModel.findOne({ email })
-    //     const compare = await bcrypt.compare(password, user.password)
-    //     return compare ? user : null
-    // }
-
-
-    // private async hashPassword(password: string, salt: string): Promise<string> {
-    //     return await bcrypt.hash(password, salt)
-    // }
 }

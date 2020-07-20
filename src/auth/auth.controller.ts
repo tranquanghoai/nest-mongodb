@@ -1,9 +1,11 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, UseFilters } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { User } from './auth.schema';
+import { User } from './schema/auth.schema';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
 
 @Controller('auth')
+@UseFilters(new HttpExceptionFilter())
 export class AuthController {
     constructor(private authService: AuthService) { }
 
