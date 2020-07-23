@@ -1,19 +1,12 @@
-import { ExceptionFilter, Catch, HttpException, ArgumentsHost } from "@nestjs/common";
-import { Request, Response } from 'express';
+import { Catch, Inject } from "@nestjs/common";
+import { BaseExceptionFilter, HTTP_SERVER_REF } from "@nestjs/core";
 
-@Catch(HttpException)
-export class HttpExceptionFilter implements ExceptionFilter {
-    catch(exception: HttpException, host: ArgumentsHost) {
-        const ctx = host.switchToHttp()
-        const response = ctx.getResponse<Response>()
-        const request = ctx.getRequest<Request>()
-        const status = exception.getStatus()
-        response
-            .status(status)
-            .json({
-                statusCode: status,
-                timestamp: new Date().toISOString(),
-                path: request.url,
-            })
+
+@Catch()
+export class AllExceptionFilter extends BaseExceptionFilter {
+    constructor(
+        @Inject(HTTP_SERVER_REF)
+    ) {
+        super();
     }
 }

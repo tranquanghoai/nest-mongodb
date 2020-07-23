@@ -1,13 +1,13 @@
-import { Controller, Post, Body, ValidationPipe, NotFoundException, UseFilters } from '@nestjs/common';
+import { Controller, Post, Body, ValidationPipe, NotFoundException, UseFilters, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './schema/auth.schema';
-import { HttpExceptionFilter } from 'src/http-exception.filter';
+// import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
-@UseFilters(new HttpExceptionFilter())
+// @UseFilters(new HttpExceptionFilter())
 export class AuthController {
     constructor(private authService: AuthService) { }
 
