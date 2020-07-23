@@ -16,6 +16,7 @@ export class AuthService {
 
     async signUp(authCredentials: AuthCredentialsDto): Promise<User> {
         const { email, password } = authCredentials
+        console.log(email, password)
         try {
             const createdUser = new this.userModel({ email })
             var salt = bcryptjs.genSaltSync(10);
@@ -24,7 +25,10 @@ export class AuthService {
             return createdUser
         } catch (error) {
             if (error.code === 11000) {
-                throw new ConflictException()
+                throw new ConflictException({
+                    messageNode: 'AUTH',
+                    message: 'USER_EXITS'
+                })
             } else {
                 throw new InternalServerErrorException()
             }
@@ -34,9 +38,18 @@ export class AuthService {
     async signIn(authCredentials: AuthCredentialsDto): Promise<{ accessToken: string }> {
         const { email, password } = authCredentials
         const user = await this.userModel.findOne({ email })
+        if (!user) {
+            throw new UnauthorizedException({
+                messageNode: "AUTH",
+                message: 'USERNAME_NOT_EXITS'
+            })
+        }
         const matchPassword = await bcryptjs.compare(password, user.password)
         if (!matchPassword) {
-            throw new UnauthorizedException()
+            throw new UnauthorizedException({
+                messageNode: "AUTH",
+                message: 'WRONG_PASSWORD'
+            })
         }
         const jwtPayload: JwtPayload = { email }
         const accessToken = await this.jwtService.sign(jwtPayload)

@@ -7,12 +7,13 @@ import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from './get-user.decorator';
 
 @Controller('auth')
-// @UseFilters(new HttpExceptionFilter())
+@UseFilters(HttpExceptionFilter)
 export class AuthController {
     constructor(private authService: AuthService) { }
 
     @Post('signup')
     async signUp(@Body(ValidationPipe) authCredentials: AuthCredentialsDto): Promise<User> {
+        console.log(authCredentials, 'authCredentials')
         return this.authService.signUp(authCredentials)
     }
 
