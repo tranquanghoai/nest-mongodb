@@ -2,11 +2,16 @@ import { Controller, Post, Body, ValidationPipe, NotFoundException, UseFilters, 
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User } from './schema/auth.schema';
-// import { HttpExceptionFilter } from 'src/http-exception.filter';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from './get-user.decorator';
+import { GetUser } from '../decorator/get-user.decorator';
+import { HttpExceptionFilter } from 'src/http-exception.filter';
+import { Roles } from 'src/decorator/roles.decorator';
+import { GlobalGuard } from 'src/guard/global.guard';
 
 @Controller('auth')
+
+@Roles('admin')
+@UseGuards(GlobalGuard)
 @UseFilters(HttpExceptionFilter)
 export class AuthController {
     constructor(private authService: AuthService) { }
